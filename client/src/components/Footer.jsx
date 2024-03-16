@@ -77,7 +77,7 @@ export default function FooterCom() {
           </div>
         </div>
         <FooterDivider />
-        <div className="w-full sm:flex sm: items-center sm-justify-between">
+        <div className="flex-col w-full sm:flex sm: items-center sm-justify-between">
           <FooterCopyright
             href="#"
             by="Vanshaj's Blog"
