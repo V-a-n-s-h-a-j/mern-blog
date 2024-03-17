@@ -12,7 +12,7 @@ const signin = async (req, res, next) => {
     if (!validUser) return next(errorHandler(404, "Invalid Email"));
     const validPassword = bcryptjs.compareSync(password, validUser.password);
     if (!validPassword) return next(errorHandler(400, "Invalid Passsword"));
-    const {password: pass, ...rest} = validUser._doc;
+    const { password: pass, ...rest } = validUser._doc;
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     res
       .status(200)
