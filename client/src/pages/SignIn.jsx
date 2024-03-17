@@ -1,11 +1,19 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice.js";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function SignIn() {
+  const dispatch = useDispatch();
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  // const [loading, setLoading] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
   const handleChange = (e) => {
     // console.log(e.target.value);
@@ -15,22 +23,27 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password)
-      return setErrorMessage("All fields are required");
+      return dispatch(signInFailure("All fields are required"));
     try {
-      setLoading(true);
-      setErrorMessage(null);
+      dispatch(signInStart());
+      // setLoading(true);
+      // setErrorMessage(null);
       const res = await fetch("api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (data.success === false) return setErrorMessage(data.message);
-      setLoading(false);
-      if (res.ok) navigate("/");
+      if (data.success === false) return dispatch(signInFailure(data.message));
+      // setLoading(false);
+      if (res.ok) {
+        dispatch(signInSuccess(data));
+        navigate("/");
+      }
     } catch (error) {
-      setErrorMessage(error.message);
-      setLoading(false);
+      dispatch(signInFailure(error.message));
+      // setErrorMessage(error.message);
+      // setLoading(false);
     }
   };
   return (
@@ -52,7 +65,6 @@ export default function SignIn() {
         {/* right */}
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            
             <div>
               <Label value="Your Email" />
               <TextInput
