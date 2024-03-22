@@ -10,10 +10,13 @@ import {
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleTheme } from "../redux/theme/themeSlice";
 export default function Header() {
+  const dispatch = useDispatch();
   const path = useLocation().pathname;
+  const {theme} = useSelector(state => state.theme);
   const { currentUser } = useSelector((state) => state.user);
   return (
     <Navbar className="border-b-2">
@@ -38,8 +41,15 @@ export default function Header() {
         <AiOutlineSearch />
       </Button>
       <div className="flex gap-2 md:order-2">
-        <Button className="w-12 h-10 lg:hidden sm:inline" color="gray" pill>
-          <FaMoon />
+        <Button
+          className="w-12 h-10 lg:hidden sm:inline"
+          color="gray"
+          pill
+          onClick={() => {
+            dispatch(toggleTheme());
+          }}
+        >
+          {theme==='light'? <FaMoon />: <FaSun/>}
         </Button>
         {currentUser ? (
           <Dropdown
@@ -53,14 +63,12 @@ export default function Header() {
                 {currentUser.email}
               </span>
             </Dropdown.Header>
-            <DropdownDivider/>
-            <Link to={'/dashboard?tab=profile'}>
-              <Dropdown.Item>Profile</Dropdown.Item>  
+            <DropdownDivider />
+            <Link to={"/dashboard?tab=profile"}>
+              <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
-            <Link to={'/'}>
-              <Dropdown.Item>
-                Log Out
-              </Dropdown.Item>
+            <Link to={"/"}>
+              <Dropdown.Item>Log Out</Dropdown.Item>
             </Link>
           </Dropdown>
         ) : (
