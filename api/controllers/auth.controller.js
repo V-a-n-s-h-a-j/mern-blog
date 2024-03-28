@@ -25,15 +25,15 @@ const google = async (req, res, next) => {
           Math.random().toString(9).slice(-4),
         email,
         password: hashedPassword,
-        profilePicture: googlePhotoUrl
+        profilePicture: googlePhotoUrl,
       });
       await newUser.save();
-      const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET);
-      const {password, ...rest} = newUser._doc;
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const { password, ...rest } = newUser._doc;
       res
-      .status(200)
-      .cookie("access_token", token, { httpOnly: true })
-      .json(rest);
+        .status(200)
+        .cookie("access_token", token, { httpOnly: true })
+        .json(rest);
       console.log("succesafully added new user");
     }
   } catch (error) {}

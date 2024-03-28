@@ -31,15 +31,15 @@ export default function DashSidebar() {
                 label="User"
                 labelColor="dark"
                 active={tab === "profile"}
+                as="div"
               >
                 Profile
               </Sidebar.Item>
             </Link>
-            <Link to="/dashboard">
             <Sidebar.Item className="cursor-pointer" icon={HiArrowSmRight}>
               Sign Out
             </Sidebar.Item>
-            </Link>
+            
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </Sidebar>
