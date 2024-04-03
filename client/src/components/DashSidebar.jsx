@@ -9,8 +9,10 @@ import {
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-
+import { useDispatch } from "react-redux";
+import { signoutSuccess } from "../redux/user/userSlice";
 export default function DashSidebar() {
+  const dispatch = useDispatch();
   const location = useLocation();
   const [tab, setTab] = useState("");
   useEffect(() => {
@@ -20,6 +22,16 @@ export default function DashSidebar() {
     if (tabFromUrl) setTab(tabFromUrl);
     // else setTab("");
   }, [location.search]);
+  const handleSignout = async () => {
+    try {
+      const res = await fetch("/api/user/signout", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) console.log(error.message);
+      else dispatch(signoutSuccess());
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <>
       <Sidebar className="w-full md:w-56">
@@ -36,10 +48,13 @@ export default function DashSidebar() {
                 Profile
               </Sidebar.Item>
             </Link>
-            <Sidebar.Item className="cursor-pointer" icon={HiArrowSmRight}>
+            <Sidebar.Item
+              onClick={handleSignout}
+              className="cursor-pointer"
+              icon={HiArrowSmRight}
+            >
               Sign Out
             </Sidebar.Item>
-            
           </Sidebar.ItemGroup>
         </Sidebar.Items>
       </Sidebar>
