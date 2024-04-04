@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema(
       default:
         "https://static.vecteezy.com/system/resources/thumbnails/010/260/479/small/default-avatar-profile-icon-of-social-media-user-in-clipart-style-vector.jpg",
     },
+    isAdmin: {
+      type:  Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
