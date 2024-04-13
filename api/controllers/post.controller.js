@@ -26,6 +26,27 @@ export const create = async (req, res, next) => {
   }
 };
 
+export const deletePost = async (req, res, next) => {
+  // const deletedPost = await Post.findByIdAndRemove(req.params.id);
+  if (!req.user.isAdmin)
+    return next(errorHandler(403, "You are not allowed to delete this post"));
+  if (req.user.id != req.params.userId) {
+    res.json({ owner: req.user.id, user: req.params.userId });
+    return next(
+      errorHandler(403, "You are not allowed to delete others' post")
+    );
+  }
+
+  try {
+    await Post.findByIdAndDelete(req.params.postId);
+    res.status(200).json("The post has been deleted");
+    // console.log("deleted successfully");
+  } catch (error) {
+    // console.log(error.message);
+    next(error);
+  }
+};
+
 export const getposts = async (req, res, next) => {
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
