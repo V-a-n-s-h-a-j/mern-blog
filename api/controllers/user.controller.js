@@ -132,3 +132,31 @@ export const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUsers = async (req, res, next) => {
+  if (!req.user.isAdmin)
+    return next(errorHandler(403, "You are not allowed to see all users"));
+  try {
+    const startIndex = req.query.startIndex || 0;
+    const limit = req.query.limit || 9;
+    const startDirection = req.query.sort === "asc" ? 1 : -1;
+    const users = await User.find({})
+      .sort({ createdAt: startDirection })
+      .skip(startIndex)
+      .limit(limit);
+    const usersWithoutPassword = users.map(user => {
+      const { password, ...rest } = user._doc;
+      return rest;
+    });
+    // res.status(200).json(usersWithoutPassword);
+    const totalUsers = await User.countDocuments();
+    const now = new Date();
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth()-1,
+      now.getDate()
+    )
+    const lastMonthUsers = await User.countDocuments({createdAt: {$gte: oneMonthAgo}});
+    res.status(200).json({usersWithoutPassword, totalUsers, lastMonthUsers});
+  } catch (error) {}
+};
