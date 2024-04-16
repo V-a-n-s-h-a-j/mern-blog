@@ -144,7 +144,7 @@ export const getUsers = async (req, res, next) => {
       .sort({ createdAt: startDirection })
       .skip(startIndex)
       .limit(limit);
-    const usersWithoutPassword = users.map(user => {
+    const usersWithoutPassword = users.map((user) => {
       const { password, ...rest } = user._doc;
       return rest;
     });
@@ -153,10 +153,12 @@ export const getUsers = async (req, res, next) => {
     const now = new Date();
     const oneMonthAgo = new Date(
       now.getFullYear(),
-      now.getMonth()-1,
+      now.getMonth() - 1,
       now.getDate()
-    )
-    const lastMonthUsers = await User.countDocuments({createdAt: {$gte: oneMonthAgo}});
-    res.status(200).json({usersWithoutPassword, totalUsers, lastMonthUsers});
+    );
+    const lastMonthUsers = await User.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+    res.status(200).json({ usersWithoutPassword, totalUsers, lastMonthUsers });
   } catch (error) {}
 };

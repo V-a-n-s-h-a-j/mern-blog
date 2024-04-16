@@ -7,6 +7,7 @@ import {
   HiUser,
   HiDocumentText,
   HiOutlineDocumentText,
+  HiOutlineUserGroup
 } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -52,7 +53,7 @@ export default function DashSidebar() {
                 Profile
               </Sidebar.Item>
             </Link>
-            {currentUser && (
+            {currentUser.isAdmin && (
               <Link to="/dashboard?tab=posts">
                 <Sidebar.Item
                   icon={HiOutlineDocumentText}
@@ -62,6 +63,19 @@ export default function DashSidebar() {
                   as="div"
                 >
                   Posts
+                </Sidebar.Item>
+              </Link>
+            )}
+            {currentUser.isAdmin && (
+              <Link to="/dashboard?tab=users">
+                <Sidebar.Item
+                  icon={HiOutlineUserGroup}
+                  // label="Admin"
+                  // labelColor="dark"
+                  active={tab === "users"}
+                  as="div"
+                >
+                  Users
                 </Sidebar.Item>
               </Link>
             )}
