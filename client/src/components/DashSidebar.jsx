@@ -7,7 +7,8 @@ import {
   HiUser,
   HiDocumentText,
   HiOutlineDocumentText,
-  HiOutlineUserGroup
+  HiOutlineUserGroup,
+  HiChartPie
 } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -42,6 +43,19 @@ export default function DashSidebar() {
       <Sidebar className="w-full md:w-56">
         <Sidebar.Items>
           <Sidebar.ItemGroup className="flex flex-col gap-1">
+              {currentUser && currentUser.isAdmin && (
+                <Link to="/dashboard?tab=dash">
+                  <Sidebar.Item
+                    icon={HiChartPie}
+                    // label="Admin"
+                    // labelColor="dark"
+                    active={tab === "dash" || !tab}
+                    as="div"
+                  >
+                    Dashboard
+                  </Sidebar.Item>
+                </Link>
+              )}
             <Link to="/dashboard?tab=profile">
               <Sidebar.Item
                 icon={HiUser}
