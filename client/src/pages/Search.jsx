@@ -1,7 +1,7 @@
 import { Button, Select, TextInput } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import PostCard from "../components/PostCard"
+import PostCard from "../components/PostCard";
 export default function Search() {
   const [sidebarData, setSidebarData] = useState({
     searchTerm: "",
@@ -77,20 +77,19 @@ export default function Search() {
     navigate(`/search?${searchQuery}`);
   };
 
-  const handleShowMore = async() => {
+  const handleShowMore = async () => {
     const numberOfPosts = posts.length;
     const startIndex = numberOfPosts;
     const urlParams = new URLSearchParams(location.search);
-    urlParams.set('startIndex', startIndex);
+    urlParams.set("startIndex", startIndex);
     const searchQuery = urlParams.toString();
     const res = await fetch(`/api/post/getposts?${searchQuery}`);
-    if (!res.ok)  return;
+    if (!res.ok) return;
     const data = await res.json();
     setPosts([...posts, ...data.posts]);
-    if (data.posts.length===9)  setShowMore(true);
+    if (data.posts.length === 9) setShowMore(true);
     else setShowMore(false);
-
-  }
+  };
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -142,17 +141,21 @@ export default function Search() {
           Post Results:{" "}
         </h1>
         <div className="p-7 flex flex-wrap gap-4">
-          {!loading && posts.length===0 && (
+          {!loading && posts.length === 0 && (
             <p className="text-xl text-gray-500 ">No Posts Found</p>
           )}
           {loading && <p className="text-xl text-gray-500">Loading...</p>}
-          {!loading && posts && 
-          posts.map(post => <PostCard key={post._id} post={post}/>)}
-          {
-            showMore && <button onClick={handleShowMore} className="text-teal-500 text-lg hover:underline p-7 w-full">
+          {!loading &&
+            posts &&
+            posts.map((post) => <PostCard className="max-w-3xl" key={post._id} post={post} />)}
+          {showMore && (
+            <button
+              onClick={handleShowMore}
+              className="text-teal-500 text-lg hover:underline p-7 w-full"
+            >
               Show more
             </button>
-          }
+          )}
         </div>
       </div>
     </div>
